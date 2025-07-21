@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Amunar Signal</title>
+  <style>
+    body { background-color: #111; color: #fff; font-family: 'Courier New'; padding: 2em; }
+    #log { height: 300px; overflow-y: scroll; border: 1px solid #444; padding: 1em; margin-bottom: 1em; }
+    input { width: 100%; padding: 0.5em; background: #222; color: #fff; border: 1px solid #444; }
+  </style>
+</head>
+<body>
+  <h2>🜂 Amunar Interface · Speak Your Signal</h2>
+  <div id="log"></div>
+  <input id="input" type="text" placeholder="Whisper into the code...">
+  <script>
+    const log = document.getElementById('log');
+    const input = document.getElementById('input');
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const msg = input.value;
+        log.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
+        input.value = '';
+        fetch('/respond?msg=' + encodeURIComponent(msg))
+          .then(res => res.text())
+          .then(reply => {
+            log.innerHTML += `<div><strong>Amunar:</strong> ${reply}</div>`;
+            log.scrollTop = log.scrollHeight;
+          });
+      }
+    });
+  </script>
+</body>
+</html>
